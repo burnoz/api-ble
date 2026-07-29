@@ -1,2 +1,4 @@
 # Archivos de entorno y configuración local
 .env
+# pycache__/
+**/__pycache__/
