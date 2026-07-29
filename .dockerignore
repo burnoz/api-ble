@@ -1,0 +1,28 @@
+# Entornos virtuales (ocupan mucho espacio y no sirven en Linux)
+.venv/
+venv/
+env/
+
+# Caché de Python (archivos compilados innecesarios)
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Secretos y variables de entorno locales (por seguridad)
+.env
+.env.*
+
+# Control de versiones (evita inflar el tamaño de la imagen)
+.git/
+.gitignore
+
+# Configuración de editores/IDE
+.vscode/
+.idea/
+
+# Pruebas y reportes
+.pytest_cache/
+.coverage
+htmlcov/
+tests/
