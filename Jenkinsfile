@@ -16,7 +16,7 @@ pipeline {
                     python3 -m venv venv
                     . venv/bin/activate
                     pip install -r requirements.txt
-                    python -m unittest tests/test_api_ble.py
+                    python -m unittest tests/test_api_leaves.py
                 '''
             }
         }
