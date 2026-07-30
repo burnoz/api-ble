@@ -17,8 +17,6 @@ pipeline {
         stage ('Checkout') {
             steps {
                 checkout scm
-
-                echo "Desplegando en el proyecto: ${env.GCP_PROJECT_ID}"
             }
         }
 
@@ -43,7 +41,7 @@ pipeline {
         stage ('Authenticate & Push') {
             steps {
                 withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GCP_KEY_FILE')]) {
-                    sh """
+                    sh '''
                         set -e
 
                         gcloud auth activate-service-account --key-file=$GCP_KEY_FILE 
@@ -52,7 +50,7 @@ pipeline {
 
                         docker push ${REGISTRY_URL}:${BUILD_NUMBER}
                         docker push ${REGISTRY_URL}:latest
-                    """
+                    '''
                 }
             }
         }
