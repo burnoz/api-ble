@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-        GCP_PROJECT_ID  = '${env.GCP_PROJECT_ID}'
-        GCP_REGION      = '${env.GCP_REGION}'
+        GCP_PROJECT_ID  = "${env.GCP_PROJECT_ID}"
+        GCP_REGION      = "${env.GCP_REGION}"
 
         ARTIFACT_REPO   = 'api-ble-repo'
         IMAGE_NAME      = 'api-ble'
         SERVICE_NAME    = 'api-ble-service'
         
-        REGISTRY_URL    = '${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${ARTIFACT_REPO}/${IMAGE_NAME}'
+        REGISTRY_URL    = "${env.GCP_REGION}-docker.pkg.dev/${env.GCP_PROJECT_ID}/${env.ARTIFACT_REPO}/${env.IMAGE_NAME}"
     }
 
     stages {
