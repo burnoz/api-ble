@@ -58,15 +58,15 @@ pipeline {
 
     post {
         always {
-            sh "docker rmi ${REGISTRY_URL}:${BUILD_NUMBER} || true"
+            sh 'docker rmi ${REGISTRY_URL}:${BUILD_NUMBER} || true'
         }
 
         success {
-            echo "Build and push successful!"
+            echo 'Build and push successful!'
         }
 
         failure {
-            echo "Build or push failed."
+            echo 'Build or push failed.'
         }
     }
 }
