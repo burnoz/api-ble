@@ -9,21 +9,20 @@ pipeline {
         IMAGE_NAME      = 'api-ble'
         SERVICE_NAME    = 'api-ble-service'
         
-        REGISTRY_URL    = "${env.GCP_REGION}-docker.pkg.dev/${env.GCP_PROJECT_ID}/${env.ARTIFACT_REPO}/${env.IMAGE_NAME}"
+        REGISTRY_URL    = "${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/api-ble-repo/api-ble"
     }
 
     stages {
-        // Checkout code
         stage ('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        // tests
         stage ('Tests') {
             steps {
                 sh '''
+                    set -e
                     python3 -m venv venv
                     . venv/bin/activate
                     pip install -r requirements.txt
@@ -34,7 +33,7 @@ pipeline {
 
         stage ('Build Docker Image') {
             steps {
-                sh 'docker build -t ${REGISTRY_URL}:${BUILD_NUMBER} -t ${REGISTRY_URL}:latest .'
+                sh "docker build -t ${REGISTRY_URL}:${BUILD_NUMBER} -t ${REGISTRY_URL}:latest ."
             }
         }
 
@@ -58,7 +57,7 @@ pipeline {
 
     post {
         always {
-            sh 'docker rmi ${REGISTRY_URL}:${BUILD_NUMBER} || true'
+            sh "docker rmi ${REGISTRY_URL}:${BUILD_NUMBER} || true"
         }
 
         success {
