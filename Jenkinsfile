@@ -55,6 +55,10 @@ pipeline {
         }
 
         stage ('Deploy to Cloud Run') {
+            when {
+                branch 'main'
+            }
+
             steps {
                 withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GCP_KEY_FILE')]) {
                     sh '''
