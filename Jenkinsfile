@@ -53,6 +53,22 @@ pipeline {
                 }
             }
         }
+
+        stage ('Deploy to Cloud Run') {
+            steps {
+                withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GCP_KEY_FILE')]) {
+                    sh '''
+                        set -e
+                        
+                        gcloud run deploy ${SERVICE_NAME} \
+                            --image ${REGISTRY_URL}:${BUILD_NUMBER} \
+                            --platform managed \
+                            --allow-unauthenticated \
+                            --quiet
+                    '''
+                }
+            }
+        }
     }
 
     post {
