@@ -34,7 +34,7 @@ pipeline {
 
         stage ('Build Docker Image') {
             steps {
-                sh "docker build -t ${REGISTRY_URL}:${BUILD_NUMBER} -t ${REGISTRY_URL}:latest ."
+                sh 'docker build -t ${REGISTRY_URL}:${BUILD_NUMBER} -t ${REGISTRY_URL}:latest .'
             }
         }
 
