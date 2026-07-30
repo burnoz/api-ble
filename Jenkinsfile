@@ -60,9 +60,13 @@ pipeline {
                     sh '''
                         set -e
                         
+                        gcloud auth activate-service-account --key-file=$GCP_KEY_FILE 
+                        gcloud config set project ${GCP_PROJECT_ID}
+
                         gcloud run deploy ${SERVICE_NAME} \
                             --image ${REGISTRY_URL}:${BUILD_NUMBER} \
                             --platform managed \
+                            --region ${GCP_REGION} \
                             --allow-unauthenticated \
                             --quiet
                     '''
