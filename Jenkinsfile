@@ -9,7 +9,7 @@ pipeline {
         IMAGE_NAME      = 'api-ble'
         SERVICE_NAME    = 'api-ble-service'
         
-        REGISTRY_URL    = "${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${ARTIFACT_REPO}/${IMAGE_NAME}"
+        REGISTRY_URL    = '${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${ARTIFACT_REPO}/${IMAGE_NAME}'
     }
 
     stages {
