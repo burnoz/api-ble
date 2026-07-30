@@ -86,12 +86,10 @@ pipeline {
 
         success {
             echo 'Build and push successful!'
-            githubNotify context: 'Jenkins CI', description: 'Build passed!', status: 'SUCCESS'
         }
 
         failure {
             echo 'Build or push failed.'
-            githubNotify context: 'Jenkins CI', description: 'Build failed!', status: 'FAILURE'
         }
     }
 }
