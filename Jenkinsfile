@@ -17,6 +17,8 @@ pipeline {
         stage ('Checkout') {
             steps {
                 checkout scm
+
+                echo "Desplegando en el proyecto: ${env.GCP_PROJECT_ID}"
             }
         }
 
