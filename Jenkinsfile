@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        GCP_PROJECT_ID  = "devops-ble"
-        GCP_REGION      = "us-central1"
+        GCP_PROJECT_ID  = "${env.GCP_PROJECT_ID}"
+        GCP_REGION      = "${env.GCP_REGION}"
 
         ARTIFACT_REPO   = 'api-ble-repo'
         IMAGE_NAME      = 'api-ble'
