@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# nyehehehe
+
 categorias_map = {
     "Medicamentos no caducos": 1,
     "Artículos médicos": 2,
