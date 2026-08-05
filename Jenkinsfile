@@ -77,6 +77,18 @@ pipeline {
                 }
             }
         }
+
+        stage ("Deploy to Kubernetes (test)") {
+            when {
+                branch 'main'
+            }
+
+            steps{
+                withCredentials([file(credentialsId: "k8s-kubeconfig", variable: 'KUBECONFIG_PATH')]) {
+                    sh 'kubectl --kubeconfig=$KUBECONFIG_PATH get nodes'
+                }
+            }
+        }
     }
 
     post {
