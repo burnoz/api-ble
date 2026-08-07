@@ -108,12 +108,15 @@ pipeline {
                     script {
                         def imageTag = "${env.REGISTRY_URL}:latest"
                         
-                        sh '''
-                            sed -i 's|image: .*|image: ${imageTag}|g' k8s/deployment.yml
-                            kubectl --kubeconfig=$KUBECONFIG_PATH apply -f k8s/deployment.yml
-                            kubectl --kubeconfig=$KUBECONFIG_PATH apply -f k8s/service.yml
-                            kubectl --kubeconfig=$KUBECONFIG_PATH rollout status deployment/api-ble-deployment --timeout=420s
-                        '''
+                        sh """
+                            set -e
+                            sed -i "s|image: .*|image: ${imageTag}|g" k8s/deployment.yml
+                            
+                            kubectl --kubeconfig=\$KUBECONFIG_PATH apply -f k8s/deployment.yml
+                            kubectl --kubeconfig=\$KUBECONFIG_PATH apply -f k8s/service.yml
+                            
+                            kubectl --kubeconfig=\$KUBECONFIG_PATH rollout status deployment/api-ble-deployment --timeout=120s
+                        """
                     }
                 }
             }
