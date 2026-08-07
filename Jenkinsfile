@@ -107,6 +107,7 @@ pipeline {
                 withCredentials([file(credentialsId: 'k8s-kubeconfig', variable: 'KUBECONFIG_PATH')]) {
                     script {
                         def imageTag = "${env.REGISTRY_URL}:${BUILD_NUMBER}"
+                        echo "Deploying image: ${imageTag} to Kubernetes cluster"
                         
                         sh '''
                             sed -i 's|image: .*|image: ${imageTag}|g' k8s/deployment.yml
