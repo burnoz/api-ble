@@ -13,6 +13,12 @@ pipeline {
             defaultValue: false, 
             description: '¿deploy a cloud run?'
         )
+
+        string(
+            name: 'K8S_DEPLOY_TIMEOUT', 
+            defaultValue: '420s', 
+            description: 'Tiempo limite para deploy a k8s'
+        )
     }
 
     environment {
@@ -115,7 +121,7 @@ pipeline {
                             kubectl --kubeconfig=\$KUBECONFIG_PATH apply -f k8s/deployment.yml
                             kubectl --kubeconfig=\$KUBECONFIG_PATH apply -f k8s/service.yml
                             
-                            kubectl --kubeconfig=\$KUBECONFIG_PATH rollout status deployment/api-ble-deployment --timeout=420s
+                            kubectl --kubeconfig=\$KUBECONFIG_PATH rollout status deployment/api-ble-deployment --timeout=${params.K8S_DEPLOY_TIMEOUT}
                         """
                     }
                 }
