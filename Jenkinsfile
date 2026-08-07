@@ -121,7 +121,7 @@ pipeline {
                             kubectl --kubeconfig=\$KUBECONFIG_PATH apply -f k8s/deployment.yml
                             kubectl --kubeconfig=\$KUBECONFIG_PATH apply -f k8s/service.yml
                             
-                            kubectl --kubeconfig=\$KUBECONFIG_PATH rollout status deployment/api-ble-deployment --timeout=${params.K8S_DEPLOY_TIMEOUT}
+                            kubectl --kubeconfig=\$KUBECONFIG_PATH rollout status deployment/api-ble-deployment --timeout=840s
                         """
                     }
                 }
