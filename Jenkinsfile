@@ -7,6 +7,12 @@ pipeline {
             defaultValue: true, 
             description: '¿deploy a k8s?'
         )
+
+        booleanParam(
+            name: 'DEPLOY_TO_CLOUD_RUN', 
+            defaultValue: false, 
+            description: '¿deploy a cloud run?'
+        )
     }
 
     environment {
@@ -66,7 +72,7 @@ pipeline {
             when {
                 allOf {
                     branch 'main'
-                    expression { return params.DEPLOY_TO_K8S == true }
+                    expression { return params.DEPLOY_TO_CLOUD_RUN == true }
                 }
             }
 
@@ -91,7 +97,10 @@ pipeline {
 
         stage('Deploy to Kubernetes (test)') {
             when {
-                branch 'main'
+                allOf {
+                    branch 'main'
+                    expression { return params.DEPLOY_TO_K8S == true }
+                }
             }
 
             steps {
@@ -103,7 +112,7 @@ pipeline {
                             sed -i 's|image: .*|image: ${imageTag}|g' k8s/deployment.yml
                             kubectl --kubeconfig=$KUBECONFIG_PATH apply -f k8s/deployment.yml
                             kubectl --kubeconfig=$KUBECONFIG_PATH apply -f k8s/service.yml
-                            kubectl --kubeconfig=$KUBECONFIG_PATH rollout status deployment/api-ble-deployment --timeout=120s
+                            kubectl --kubeconfig=$KUBECONFIG_PATH rollout status deployment/api-ble-deployment --timeout=420s
                         '''
                     }
                 }
