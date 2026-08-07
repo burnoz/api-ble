@@ -1,6 +1,14 @@
 pipeline {
     agent any
 
+    parameters {
+        booleanParam(
+            name: 'DEPLOY_TO_K8S', 
+            defaultValue: true, 
+            description: '¿deploy a k8s?'
+        )
+    }
+
     environment {
         GCP_PROJECT_ID  = "${env.GCP_PROJECT_ID}"
         GCP_REGION      = "${env.GCP_REGION}"
@@ -56,7 +64,10 @@ pipeline {
 
         stage ('Deploy to Cloud Run') {
             when {
-                branch 'main'
+                allOf {
+                    branch 'main'
+                    expression { return params.DEPLOY_TO_K8S == true }
+                }
             }
 
             steps {
@@ -78,14 +89,24 @@ pipeline {
             }
         }
 
-        stage ("Deploy to Kubernetes (test)") {
+        stage('Deploy to Kubernetes (test)') {
             when {
                 branch 'main'
             }
 
-            steps{
-                withCredentials([file(credentialsId: "k8s-kubeconfig", variable: 'KUBECONFIG_PATH')]) {
-                    sh 'kubectl --kubeconfig=$KUBECONFIG_PATH get nodes'
+            steps {
+                withCredentials([file(credentialsId: 'k8s-kubeconfig', variable: 'KUBECONFIG_PATH')]) {
+                    script {
+                        def imageTag = "us-central1-docker.pkg.dev/${GCP_PROJECT_ID}/${GAR_REPO}/${IMAGE_NAME}:${BUILD_NUMBER}"
+                        
+                        sh """
+                            sed -i 's|image: .*|image: ${imageTag}|g' k8s/deployment.yaml
+                            kubectl --kubeconfig=$KUBECONFIG_PATH apply -f k8s/deployment.yaml
+                            kubectl --kubeconfig=$KUBECONFIG_PATH apply -f k8s/service.yaml
+                            
+                            kubectl --kubeconfig=$KUBECONFIG_PATH rollout status deployment/api-ble-deployment --timeout=120s
+                        """
+                    }
                 }
             }
         }
