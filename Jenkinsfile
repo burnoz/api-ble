@@ -97,7 +97,7 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'k8s-kubeconfig', variable: 'KUBECONFIG_PATH')]) {
                     script {
-                        def imageTag = "us-central1-docker.pkg.dev/${GCP_PROJECT_ID}/${GAR_REPO}/${IMAGE_NAME}:${BUILD_NUMBER}"
+                        def imageTag = "${env.REGISTRY_URL}:${BUILD_NUMBER}"
                         
                         sh """
                             sed -i 's|image: .*|image: ${imageTag}|g' k8s/deployment.yaml
